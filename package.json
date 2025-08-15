@@ -1,0 +1,41 @@
+{
+  "name": "ebook-course-generator",
+  "version": "1.0.0",
+  "description": "Gerador de E-books e Cursos com IA, RAG e Web Scraping",
+  "type": "module",
+  "scripts": {
+    "setup": "node scripts/setup.js",
+    "dev": "node scripts/dev.js",
+    "dev:frontend": "vite",
+    "dev:server": "nodemon server/index.js",
+    "build": "vite build",
+    "preview": "vite preview",
+    "server": "node server/index.js",
+    "start": "npm run server"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.9.1",
+    "axios": "^1.11.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1",
+    "openai": "^4.104.0",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-legacy": "^7.2.1",
+    "nodemon": "^3.0.1",
+    "vite": "^7.1.2"
+  },
+  "keywords": [
+    "ebook",
+    "course",
+    "ai",
+    "rag",
+    "education",
+    "content-generation"
+  ],
+  "author": "Seu Nome",
+  "license": "MIT"
+}

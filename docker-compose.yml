@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  # Aplicação principal
+  ebook-generator:
+    build: .
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+    volumes:
+      - ./data:/app/data
+      - ./.env:/app/.env
+    depends_on:
+      - agno
+      - crawl4ai
+    networks:
+      - ebook-network
+
+  # Agno RAG Service (exemplo)
+  agno:
+    image: agno/agno:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - AGNO_HOST=0.0.0.0
+      - AGNO_PORT=8000
+    volumes:
+      - agno_data:/app/data
+    networks:
+      - ebook-network
+
+  # Crawl4AI Service (exemplo)
+  crawl4ai:
+    image: crawl4ai/crawl4ai:latest
+    ports:
+      - "8001:8001"
+    environment:
+      - CRAWL4AI_HOST=0.0.0.0
+      - CRAWL4AI_PORT=8001
+    networks:
+      - ebook-network
+
+  # Redis para cache (opcional)
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - ebook-network
+
+volumes:
+  agno_data:
+  redis_data:
+
+networks:
+  ebook-network:
+    driver: bridge

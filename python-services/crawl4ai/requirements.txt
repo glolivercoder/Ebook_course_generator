@@ -1,0 +1,34 @@
+# Crawl4AI Service Dependencies - Core
+fastapi>=0.100.0
+uvicorn[standard]>=0.20.0
+pydantic>=2.0.0
+python-multipart>=0.0.6
+aiofiles>=23.0.0
+
+# Web Scraping (Essential)
+beautifulsoup4>=4.12.0
+requests>=2.28.0
+httpx>=0.24.0
+aiohttp>=3.8.0
+
+# HTML Processing
+lxml>=4.9.0
+html5lib>=1.1
+
+# Content Extraction (Lightweight)
+readability-lxml>=0.8.0
+
+# Utilities
+python-dotenv>=1.0.0
+pyyaml>=6.0.0
+validators>=0.20.0
+fake-useragent>=1.4.0
+
+# Database
+sqlalchemy>=2.0.0
+
+# Logging
+loguru>=0.7.0
+
+# Optional: Playwright (install separately if needed)
+# playwright>=1.30.0
