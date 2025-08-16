@@ -226,6 +226,72 @@
             padding: 15px;
             margin: 10px 0;
         }
+
+        .ai-selector {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            border: 2px solid #667eea;
+        }
+
+        .ai-selector-content {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .ai-selector label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .ai-selector select {
+            padding: 8px 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 14px;
+            min-width: 150px;
+        }
+
+        .ai-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .ai-status.connected {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .ai-status.disconnected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .btn-small {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .debug-footer {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid #ff6b00;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 30px;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -235,18 +301,25 @@
             <p>Crie conteúdo educacional completo com inteligência artificial</p>
         </div>
 
-        <div class="debug-section">
-            <h3>🧪 TESTES DE DEBUG</h3>
-            <button class="debug-btn" onclick="testJS()">Teste JS</button>
-            <button class="debug-btn" onclick="testTabs()">Teste Abas</button>
-            <button class="debug-btn" onclick="showTab('chapters')">→ Capítulos</button>
-            <button class="debug-btn" onclick="showTab('visual-editor')">→ Editor</button>
-            <button class="debug-btn" onclick="showTab('settings')">→ Config</button>
-            <button class="debug-btn" onclick="debugInfo()">Debug Info</button>
+        <!-- AI Model Selector -->
+        <div class="ai-selector">
+            <div class="ai-selector-content">
+                <label for="quickAiProvider">🤖 Modelo IA Ativo:</label>
+                <select id="quickAiProvider" onchange="updateActiveAI()">
+                    <option value="openai">OpenAI GPT-4</option>
+                    <option value="anthropic">Anthropic Claude</option>
+                    <option value="google">Google Gemini</option>
+                    <option value="openrouter">OpenRouter</option>
+                </select>
+                <span id="aiStatus" class="ai-status">⚠️ Não configurado</span>
+                <button class="btn-small" onclick="showTab('settings')">⚙️ Configurar</button>
+            </div>
         </div>
 
         <div class="nav-tabs">
             <button class="nav-tab active" onclick="showTab('creator')">Criador</button>
+            <button class="nav-tab" onclick="showTab('rag')">RAG</button>
+            <button class="nav-tab" onclick="showTab('books')">Livros</button>
             <button class="nav-tab" onclick="showTab('chapters')">Capítulos</button>
             <button class="nav-tab" onclick="showTab('visual-editor')">Editor Visual</button>
             <button class="nav-tab" onclick="showTab('settings')">Configurações</button>
@@ -304,6 +377,261 @@
             <button class="btn" onclick="generateProject()">🚀 Gerar Estrutura do Projeto</button>
             
             <div id="projectStatus"></div>
+        </div>
+
+        <!-- Tab: RAG -->
+        <div id="rag" class="tab-content">
+            <h2>🔍 Sistema RAG - Conhecimento Inteligente</h2>
+            
+            <!-- RAG Status -->
+            <div class="rag-status" id="ragStatus">
+                <div class="status-info">
+                    <strong>🔍 Status do RAG:</strong> <span id="ragConnectionStatus">Verificando...</span>
+                </div>
+            </div>
+
+            <!-- RAG Tabs -->
+            <div class="rag-tabs">
+                <button class="rag-tab active" onclick="showRagSection('documents')">📄 Documentos</button>
+                <button class="rag-tab" onclick="showRagSection('crawl')">🕷️ Web Scraping</button>
+                <button class="rag-tab" onclick="showRagSection('search')">🔍 Buscar</button>
+                <button class="rag-tab" onclick="showRagSection('collections')">📚 Coleções</button>
+            </div>
+
+            <!-- Documents Section -->
+            <div id="rag-documents" class="rag-section active">
+                <h3>📄 Gerenciar Documentos</h3>
+                
+                <div class="form-group">
+                    <label for="documentTitle">Título do Documento</label>
+                    <input type="text" id="documentTitle" placeholder="Ex: Guia de Marketing Digital">
+                </div>
+                
+                <div class="form-group">
+                    <label for="documentContent">Conteúdo</label>
+                    <textarea id="documentContent" rows="8" placeholder="Cole aqui o texto do documento ou digite o conteúdo..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="documentTags">Tags (separadas por vírgula)</label>
+                    <input type="text" id="documentTags" placeholder="marketing, digital, estratégia">
+                </div>
+                
+                <div class="form-group">
+                    <label for="documentCollection">Coleção</label>
+                    <select id="documentCollection">
+                        <option value="general">Geral</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="technology">Tecnologia</option>
+                        <option value="business">Negócios</option>
+                    </select>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin: 20px 0;">
+                    <button class="btn" onclick="addDocumentToRAG()">📄 Adicionar Documento</button>
+                    <button class="btn" onclick="uploadFileToRAG()">📁 Upload Arquivo</button>
+                    <button class="btn" onclick="listRAGDocuments()">📋 Listar Documentos</button>
+                </div>
+                
+                <div id="documentsContainer"></div>
+            </div>
+
+            <!-- Web Scraping Section -->
+            <div id="rag-crawl" class="rag-section">
+                <h3>🕷️ Web Scraping com Crawl4AI</h3>
+                
+                <div class="form-group">
+                    <label for="crawlUrls">URLs para Crawling (uma por linha)</label>
+                    <textarea id="crawlUrls" rows="5" placeholder="https://exemplo.com&#10;https://blog.exemplo.com&#10;https://docs.exemplo.com"></textarea>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label for="crawlDepth">Profundidade Máxima</label>
+                        <select id="crawlDepth">
+                            <option value="1">1 nível (apenas página inicial)</option>
+                            <option value="2" selected>2 níveis (+ links diretos)</option>
+                            <option value="3">3 níveis (+ sublinks)</option>
+                            <option value="4">4 níveis (crawling profundo)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="crawlDelay">Delay entre Requests (ms)</label>
+                        <input type="number" id="crawlDelay" value="1000" min="500" max="5000">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Filtros de Conteúdo</label>
+                    <div style="display: flex; gap: 20px; margin: 10px 0;">
+                        <label style="display: flex; align-items: center; gap: 5px;">
+                            <input type="checkbox" id="crawlText" checked>
+                            📝 Texto
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 5px;">
+                            <input type="checkbox" id="crawlImages">
+                            🖼️ Imagens
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 5px;">
+                            <input type="checkbox" id="crawlLinks">
+                            🔗 Links
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 5px;">
+                            <input type="checkbox" id="crawlMetadata" checked>
+                            📊 Metadados
+                        </label>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin: 20px 0;">
+                    <button class="btn" onclick="startWebCrawling()">🚀 Iniciar Crawling</button>
+                    <button class="btn" onclick="previewCrawlContent()">👁️ Preview</button>
+                    <button class="btn" onclick="stopCrawling()">⏹️ Parar</button>
+                </div>
+                
+                <div id="crawlProgress" style="display: none;">
+                    <div class="status-info">
+                        <strong>🕷️ Crawling em progresso...</strong>
+                        <div style="margin-top: 10px;">
+                            <div style="background: #e1e5e9; border-radius: 10px; height: 20px;">
+                                <div id="crawlProgressBar" style="background: #667eea; height: 100%; border-radius: 10px; width: 0%; transition: width 0.3s;"></div>
+                            </div>
+                            <p id="crawlProgressText" style="margin-top: 5px; font-size: 14px;">Preparando...</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="crawlResults"></div>
+            </div>
+
+            <!-- Search Section -->
+            <div id="rag-search" class="rag-section">
+                <h3>🔍 Buscar no Conhecimento</h3>
+                
+                <div class="form-group">
+                    <label for="searchQuery">Consulta de Busca</label>
+                    <input type="text" id="searchQuery" placeholder="Ex: estratégias de marketing digital para pequenas empresas">
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label for="searchLimit">Número de Resultados</label>
+                        <select id="searchLimit">
+                            <option value="5">5 resultados</option>
+                            <option value="10" selected>10 resultados</option>
+                            <option value="20">20 resultados</option>
+                            <option value="50">50 resultados</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="searchCollection">Coleção</label>
+                        <select id="searchCollection">
+                            <option value="">Todas as coleções</option>
+                            <option value="general">Geral</option>
+                            <option value="marketing">Marketing</option>
+                            <option value="technology">Tecnologia</option>
+                            <option value="business">Negócios</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="searchThreshold">Relevância Mínima</label>
+                        <select id="searchThreshold">
+                            <option value="0.3">Baixa (30%)</option>
+                            <option value="0.5">Média (50%)</option>
+                            <option value="0.7" selected>Alta (70%)</option>
+                            <option value="0.9">Muito Alta (90%)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin: 20px 0;">
+                    <button class="btn" onclick="searchRAG()">🔍 Buscar</button>
+                    <button class="btn" onclick="clearSearchResults()">🗑️ Limpar</button>
+                    <button class="btn" onclick="exportSearchResults()">📤 Exportar</button>
+                </div>
+                
+                <div id="searchResults"></div>
+            </div>
+
+            <!-- Collections Section -->
+            <div id="rag-collections" class="rag-section">
+                <h3>📚 Gerenciar Coleções</h3>
+                
+                <div class="form-group">
+                    <label for="newCollectionName">Nome da Nova Coleção</label>
+                    <input type="text" id="newCollectionName" placeholder="Ex: Curso de Python">
+                </div>
+                
+                <div class="form-group">
+                    <label for="newCollectionDescription">Descrição</label>
+                    <textarea id="newCollectionDescription" rows="3" placeholder="Descrição da coleção..."></textarea>
+                </div>
+                
+                <div style="display: flex; gap: 10px; margin: 20px 0;">
+                    <button class="btn" onclick="createCollection()">➕ Criar Coleção</button>
+                    <button class="btn" onclick="listCollections()">📋 Listar Coleções</button>
+                    <button class="btn" onclick="getRAGStats()">📊 Estatísticas</button>
+                </div>
+                
+                <div id="collectionsContainer"></div>
+            </div>
+        </div>
+
+        <!-- Tab: Livros -->
+        <div id="books" class="tab-content">
+            <h2>📚 Biblioteca de Livros e Cursos</h2>
+            
+            <!-- Books Stats -->
+            <div class="books-stats">
+                <div class="stat-card">
+                    <h3 id="totalBooks">0</h3>
+                    <p>Total de Livros</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="completedBooks">0</h3>
+                    <p>Concluídos</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="inProgressBooks">0</h3>
+                    <p>Em Progresso</p>
+                </div>
+                <div class="stat-card">
+                    <h3 id="totalChapters">0</h3>
+                    <p>Total de Capítulos</p>
+                </div>
+            </div>
+            
+            <!-- Books Filter -->
+            <div class="books-filter">
+                <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                    <div class="form-group" style="margin: 0;">
+                        <label for="booksFilter">Filtrar por Status:</label>
+                        <select id="booksFilter" onchange="filterBooks()">
+                            <option value="all">Todos</option>
+                            <option value="completed">Concluídos</option>
+                            <option value="in-progress">Em Progresso</option>
+                            <option value="draft">Rascunho</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" style="margin: 0;">
+                        <label for="booksSearch">Buscar:</label>
+                        <input type="text" id="booksSearch" placeholder="Título, tema, autor..." onkeyup="searchBooks()">
+                    </div>
+                    
+                    <button class="btn" onclick="refreshBooksList()">🔄 Atualizar</button>
+                </div>
+            </div>
+            
+            <!-- Books List -->
+            <div id="booksContainer">
+                <div class="status-info">
+                    <strong>📚 Biblioteca Vazia:</strong> Crie seu primeiro livro na aba "Criador" para vê-lo aqui.
+                </div>
+            </div>
         </div>
 
         <!-- Tab: Capítulos -->
