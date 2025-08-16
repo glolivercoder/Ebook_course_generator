@@ -65,9 +65,9 @@ class AgnoRAG:
                 # Tentar importar sentence-transformers
                 from sentence_transformers import SentenceTransformer
                 self.embeddings_model = "sentence-transformers/all-MiniLM-L6-v2"
-                logger.info("✅ Modelo de embeddings carregado")
+                logger.info("Modelo de embeddings carregado")
             except ImportError:
-                logger.warning("⚠️ sentence-transformers não disponível - usando modo básico")
+                logger.warning("sentence-transformers não disponível - usando modo básico")
                 self.embeddings_model = "basic-text-search"
             
             logger.info("Agno RAG inicializado com sucesso!")
@@ -346,12 +346,12 @@ if __name__ == "__main__":
     port = int(os.getenv("AGNO_PORT", "8000"))
     
     print(f"""
-    🧠 Agno RAG Service
-    ==================
+    Agno RAG Service
+    ================
     
-    🚀 Iniciando servidor em: http://{host}:{port}
-    📚 Documentação: http://{host}:{port}/docs
-    ❤️  Health Check: http://{host}:{port}/health
+    Iniciando servidor em: http://{host}:{port}
+    Documentação: http://{host}:{port}/docs
+    Health Check: http://{host}:{port}/health
     
     """)
     

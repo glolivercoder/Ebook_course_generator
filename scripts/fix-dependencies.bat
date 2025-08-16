@@ -26,7 +26,7 @@ if errorlevel 1 (
     echo ❌ Erro ao instalar dependências
     echo.
     echo 💡 Tentando instalação individual...
-    npm install express cors dotenv axios
+    npm install express cors dotenv axios cheerio
     npm install @anthropic-ai/sdk openai
     npm install multer uuid
     

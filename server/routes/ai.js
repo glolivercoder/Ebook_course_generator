@@ -5,14 +5,8 @@ import axios from 'axios';
 
 const router = express.Router();
 
-// Configurar clientes de IA
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+// Clientes de IA serão criados dinamicamente quando necessário
+// Não inicializamos aqui para evitar erros de chave ausente
 
 // Testar conexão com provedor de IA
 router.post('/test', async (req, res) => {

@@ -83,17 +83,17 @@ class Crawl4AI:
                     timeout=timeout,
                     headers={'User-Agent': self.user_agents[0]}
                 )
-                logger.info("✅ Crawl4AI inicializado com aiohttp")
+                logger.info("Crawl4AI inicializado com aiohttp")
             except ImportError:
-                logger.warning("⚠️ aiohttp não disponível - usando requests como fallback")
+                logger.warning("aiohttp não disponível - usando requests como fallback")
                 self.session = None
             
             # Verificar Playwright
             try:
                 from playwright.async_api import async_playwright
-                logger.info("✅ Playwright disponível")
+                logger.info("Playwright disponível")
             except ImportError:
-                logger.warning("⚠️ Playwright não disponível - usando BeautifulSoup apenas")
+                logger.warning("Playwright não disponível - usando BeautifulSoup apenas")
             
             logger.info("Crawl4AI inicializado com sucesso!")
         except Exception as e:
@@ -302,48 +302,48 @@ class Crawl4AI:
                 html_content = response.text
             
             soup = BeautifulSoup(html_content, 'html.parser')
-                
-                # Análise estrutural
-                analysis = {
-                    'url': url,
-                    'title': soup.find('title').get_text() if soup.find('title') else '',
-                    'headings': {
-                        'h1': len(soup.find_all('h1')),
-                        'h2': len(soup.find_all('h2')),
-                        'h3': len(soup.find_all('h3')),
-                        'h4': len(soup.find_all('h4')),
-                        'h5': len(soup.find_all('h5')),
-                        'h6': len(soup.find_all('h6'))
-                    },
-                    'elements': {
-                        'paragraphs': len(soup.find_all('p')),
-                        'links': len(soup.find_all('a')),
-                        'images': len(soup.find_all('img')),
-                        'lists': len(soup.find_all(['ul', 'ol'])),
-                        'tables': len(soup.find_all('table')),
-                        'forms': len(soup.find_all('form'))
-                    },
-                    'word_count': len(soup.get_text().split()),
-                    'meta': {},
-                    'structure': []
-                }
-                
-                # Meta tags
-                for meta in soup.find_all('meta'):
-                    name = meta.get('name') or meta.get('property')
-                    content = meta.get('content')
-                    if name and content:
-                        analysis['meta'][name] = content
-                
-                # Estrutura hierárquica
-                for heading in soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
-                    analysis['structure'].append({
-                        'level': int(heading.name[1]),
-                        'text': heading.get_text().strip(),
-                        'id': heading.get('id', '')
-                    })
-                
-                return analysis
+            
+            # Análise estrutural
+            analysis = {
+                'url': url,
+                'title': soup.find('title').get_text() if soup.find('title') else '',
+                'headings': {
+                    'h1': len(soup.find_all('h1')),
+                    'h2': len(soup.find_all('h2')),
+                    'h3': len(soup.find_all('h3')),
+                    'h4': len(soup.find_all('h4')),
+                    'h5': len(soup.find_all('h5')),
+                    'h6': len(soup.find_all('h6'))
+                },
+                'elements': {
+                    'paragraphs': len(soup.find_all('p')),
+                    'links': len(soup.find_all('a')),
+                    'images': len(soup.find_all('img')),
+                    'lists': len(soup.find_all(['ul', 'ol'])),
+                    'tables': len(soup.find_all('table')),
+                    'forms': len(soup.find_all('form'))
+                },
+                'word_count': len(soup.get_text().split()),
+                'meta': {},
+                'structure': []
+            }
+            
+            # Meta tags
+            for meta in soup.find_all('meta'):
+                name = meta.get('name') or meta.get('property')
+                content = meta.get('content')
+                if name and content:
+                    analysis['meta'][name] = content
+            
+            # Estrutura hierárquica
+            for heading in soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']):
+                analysis['structure'].append({
+                    'level': int(heading.name[1]),
+                    'text': heading.get_text().strip(),
+                    'id': heading.get('id', '')
+                })
+            
+            return analysis
                 
         except Exception as e:
             logger.error(f"Erro na análise de {url}: {e}")
@@ -453,12 +453,12 @@ if __name__ == "__main__":
     port = int(os.getenv("CRAWL4AI_PORT", "8001"))
     
     print(f"""
-    🕷️  Crawl4AI Service
-    ===================
+    Crawl4AI Service
+    ================
     
-    🚀 Iniciando servidor em: http://{host}:{port}
-    📚 Documentação: http://{host}:{port}/docs
-    ❤️  Health Check: http://{host}:{port}/health
+    Iniciando servidor em: http://{host}:{port}
+    Documentação: http://{host}:{port}/docs
+    Health Check: http://{host}:{port}/health
     
     """)
     

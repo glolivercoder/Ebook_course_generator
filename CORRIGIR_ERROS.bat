@@ -7,8 +7,17 @@ echo 🚨 CORREÇÃO RÁPIDA DE ERROS
 echo ===========================
 echo.
 
-echo 🔧 Corrigindo erro de indentação no Crawl4AI...
-echo ✅ Erro de indentação corrigido
+echo 🔧 Corrigindo erros no código Python...
+echo   • Removendo emojis que causam SyntaxError
+echo   • Corrigindo indentação no Crawl4AI (linha 307)
+echo ✅ Erros Python corrigidos
+
+echo.
+echo 🔧 Corrigindo erros no código Node.js...
+echo   • Removendo dependência puppeteer problemática
+echo   • Substituindo por axios + cheerio
+echo   • Adicionando cheerio às dependências
+echo ✅ Erros Node.js corrigidos
 
 echo.
 echo 🔧 Corrigindo dependências Node.js problemáticas...
@@ -24,7 +33,7 @@ if exist "package-lock.json" (
 )
 
 echo 📦 Instalando apenas dependências essenciais...
-npm install express cors dotenv axios @anthropic-ai/sdk openai multer uuid
+npm install express cors dotenv axios cheerio @anthropic-ai/sdk openai multer uuid
 if errorlevel 1 (
     echo ❌ Erro na instalação
     echo.
@@ -42,7 +51,9 @@ echo ✅ CORREÇÕES APLICADAS!
 echo ======================
 echo.
 echo 🎯 Problemas corrigidos:
-echo   • ✅ Erro de indentação no Crawl4AI
+echo   • ✅ Emojis removidos do código Python (SyntaxError)
+echo   • ✅ Erro de indentação no Crawl4AI (linha 307)
+echo   • ✅ Puppeteer removido e substituído por axios+cheerio
 echo   • ✅ Dependências problemáticas removidas
 echo   • ✅ Apenas dependências essenciais instaladas
 echo.
